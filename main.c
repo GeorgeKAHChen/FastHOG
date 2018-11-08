@@ -24,8 +24,8 @@ Parameter
 	int epision = 4;
 	int minS = 25;
 	int NegativeVal = 10;
-	int Oheight = 144;
-	int Owidth = 256;
+	int Oheight = 288;
+	int Owidth = 512;
 	int height = 32;
 	int width = 18;
 	float DetectProb = 0.5;

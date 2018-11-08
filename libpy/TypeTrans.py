@@ -59,8 +59,15 @@ def Dat2Img(Model, InputFile, OutputFile, img):
 					if Str == "nan":
 						Val.append(0)
 					else:
-						Val.append(float(Str))
-						Str = ""
+						for j in range(0, len(Str)):
+							if Str[j] == ".":
+								Val.append(float(Str))
+								Str = ""
+								break
+						if Str != "":
+							Val.append(int(Str))
+							Str = ""
+						
 						continue
 
 				Str += FileLine[i]
