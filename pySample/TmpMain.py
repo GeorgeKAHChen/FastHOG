@@ -90,7 +90,9 @@ def Main(Files, filename):
 		imageio.imwrite("tmpout/Img2.png", NewImg)
 		imageio.imwrite("tmpout/ClusImg.png", ClusImg)
 		imageio.imwrite("tmpout/NegImg.png", ClusImg1)
-
+		
+		TypeTrans.Img2Dat("df", "", "Input/Inp1.dat", OldImg)
+		TypeTrans.Img2Dat("df", "", "Input/Inp2.dat", NewImg)
 
 		endtime = datetime.datetime.now()
 		print(endtime - starttime, end = "\t")
