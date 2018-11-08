@@ -13,7 +13,7 @@
 #include <HogPixel.h>
 #include <time.h>
 
-//#define DEBUG
+#define DEBUG
 #define DEMO
 
 int main(int argc, char const *argv[])
@@ -135,7 +135,7 @@ Algorithm: HOG Part
 #ifdef DEMO
 		if(File != NULL)
 		{
-			fprintf(File, "Cluster = %d, Node = (%d, %d) ", ClusImg[OuterNode[2 * i]] [OuterNode[2 * i + 1]], OuterNode[2 * i], OuterNode[2 * i + 1]);
+			fprintf(File, "%d %d %d ", ClusImg[OuterNode[2 * i]] [OuterNode[2 * i + 1]], OuterNode[2 * i], OuterNode[2 * i + 1]);
 			for (j = 0; j < Hog.nbins; j ++){
 				fprintf(File, "%f ", HogResult[j]);
 			}
