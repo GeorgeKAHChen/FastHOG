@@ -36,7 +36,8 @@ def Img2Dat(Model, InputFile, OutputFile, img):
 	return img
 
 
-def Dat2Img(Model, InputFile, OutputFile, img):
+def Dat2Img(Model, InputFile, OutputFile, img1):
+	img = []
 	if Model[0] == "f":
 		File = open(InputFile, "r")
 		
@@ -45,12 +46,12 @@ def Dat2Img(Model, InputFile, OutputFile, img):
 		height = 0
 		Str = ""
 		Val = []
-		img = []
 
 		while 1:
 			FileLine = File.readline()
 			if not FileLine:
 				break
+
 			Val = []
 			for i in range(0, len(FileLine)):
 				if FileLine[i] == " " or i + 1 == len(FileLine) or FileLine[i] == "\n":
@@ -73,10 +74,12 @@ def Dat2Img(Model, InputFile, OutputFile, img):
 				Str += FileLine[i]
 
 			img.append(Val)
+	else:
+		img = img1
 	
 	if Model[1] == "f":
-		img *= 255
-		misc.imsave(filename, np.array(img))
+		#img *= 255
+		misc.imsave(OutputFile, np.array(img))
 		
 	return img
 
