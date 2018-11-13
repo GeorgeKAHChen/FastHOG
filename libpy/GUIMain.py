@@ -122,7 +122,7 @@ def Main(img, height, width, CellX, CellY):
 	return Sign
 
 
-def DBSCANGUI(ClusImg, MaxClus, HogInfo, height, width):
+def DBSCANGUI(ClusImg, MaxClus, height, width):
 	pygame.init()
 	screen = pygame.display.set_mode((1400, 800), 0, 32)
 	pygame.display.set_caption('Message Box Test')
@@ -133,11 +133,9 @@ def DBSCANGUI(ClusImg, MaxClus, HogInfo, height, width):
 	SignText = "Sign:  "
 	font_family = pygame.font.SysFont('sans', 26)
 	
-	img1 = pygame.image.load("Output/Img1.png").convert_alpha()
-	img2 = pygame.image.load("Output/Img2.png").convert_alpha()
+	img1 = pygame.image.load("Output/Img1.png").convert()
+	img2 = pygame.image.load("Output/Img2.png").convert()
 	while True:
-		screen.blit(img1, (50, 120))
-		screen.blit(img2, (500, 120))
 		break_switch = False
 		for event in pygame.event.get():
 			if event.type == QUIT:
@@ -150,34 +148,39 @@ def DBSCANGUI(ClusImg, MaxClus, HogInfo, height, width):
 
 			x, y = pygame.mouse.get_pos()
 
-			if pygame.key.get_pressed()[K_LEFT]:
-				TrueX -= 1
-				if TrueX < 0:
-					TrueX = 0
+			if event.type == KEYDOWN:
+				if pygame.key.get_pressed()[K_LEFT]:
+					TrueX -= 1
+					if TrueX < 0:
+						TrueX = 0
 
-			elif pygame.key.get_pressed()[K_RIGHT]:
-				TrueX += 1
-				if TrueX >= width:
-					TrueX = width - 1
+				elif pygame.key.get_pressed()[K_RIGHT]:
+					TrueX += 1
+					if TrueX >= width:
+						TrueX = width - 1
 
-			elif pygame.key.get_pressed()[K_UP]:
-				TrueY -= 1
-				if TrueY < 0:
-					TrueY = 0
+				elif pygame.key.get_pressed()[K_UP]:
+					TrueY -= 1
+					if TrueY < 0:
+						TrueY = 0
 
-			elif pygame.key.get_pressed()[K_DOWN]:
-				TrueY += 1
-				if TrueY >= height:
-					TrueY = height - 1
+				elif pygame.key.get_pressed()[K_DOWN]:
+					TrueY += 1
+					if TrueY >= height:
+						TrueY = height - 1
 
-			elif pygame.key.get_pressed()[K_SPACE]:
-				if ClusImg[TrueY][TrueX] != 0:
-					Sign[ClusImg[TrueY][TrueX]] = (Sign[ClusImg[TrueY][TrueX]] + 1) % 3
+				elif pygame.key.get_pressed()[K_SPACE]:
+					if ClusImg[TrueY][TrueX] != 0:
+						Sign[ClusImg[TrueY][TrueX]] = (Sign[ClusImg[TrueY][TrueX]] + 1) % 3
 
-			elif pygame.key.get_pressed()[K_q]:
-				return Sign
+				elif pygame.key.get_pressed()[K_q]:
+					return Sign
 
-			elif event.type == pygame.MOUSEBUTTONDOWN:
+			elif event.type == KEYUP:
+				pass
+
+				
+			if event.type == pygame.MOUSEBUTTONDOWN:
 				if x >= 50 and x <= 50 + normal * width and y >= 450 and y <= 450 + normal * height:
 					TrueX = int((x - 50) / normal)
 					TrueY = int((y - 450) / normal)
@@ -211,7 +214,10 @@ def DBSCANGUI(ClusImg, MaxClus, HogInfo, height, width):
 		screen.fill((47, 79, 79))
 		screen.blit(font_family.render("img2", True, (255, 255, 255)), (680, 75))
 		
-
+		screen.set_clip(50, 120, height * 2, width * 2)
+		screen.blit(img1, (50, 120))
+		screen.set_clip(600, 120, height * 2, width * 2)
+		screen.blit(img2, (600, 120))
 		#Main image
 		screen.set_clip(50, 450, normal * width, normal * height)
 		screen.fill((0, 0, 0))
@@ -221,7 +227,7 @@ def DBSCANGUI(ClusImg, MaxClus, HogInfo, height, width):
 				if Y == TrueY and X == TrueX:
 					screen.set_clip(50 + normal * (X), 120 + normal * (Y), normal, normal)
 					screen.fill((255, 0, 0))
-					screen.set_clip(500 + normal * (X), 120 + normal * (Y), normal, normal)
+					screen.set_clip(600 + normal * (X), 120 + normal * (Y), normal, normal)
 					screen.fill((255, 0, 0))
 					screen.set_clip(50 + normal * (X), 450 + normal * (Y), normal, normal)
 					screen.fill((255, 0, 0))
@@ -234,7 +240,7 @@ def DBSCANGUI(ClusImg, MaxClus, HogInfo, height, width):
 					screen.set_clip(50 + normal * (X), 450 + normal * (Y), normal, normal)
 					screen.fill((0, 255, 0))
 				elif Sign[ClusImg[Y][X]] == 2:
-					screen.set_clip(500 + normal * (X), 120 + normal * (Y), normal, normal)
+					screen.set_clip(600 + normal * (X), 120 + normal * (Y), normal, normal)
 					screen.fill((0, 0, 255))
 					screen.set_clip(50 + normal * (X), 450 + normal * (Y), normal, normal)
 					screen.fill((0, 0, 255))

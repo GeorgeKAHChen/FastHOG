@@ -13,6 +13,7 @@ test:
 
 clean:
 	@rm -rf ./main
+	@rm -rf Output/HogDEMOResult.dat
 
 cleanall:
 	@rm -rf ./main
@@ -20,3 +21,4 @@ cleanall:
 	@rm -rf Output/
 
 	@mkdir Output/
+	@mkdir Output/WARNING
