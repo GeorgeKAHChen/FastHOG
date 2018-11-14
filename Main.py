@@ -76,8 +76,8 @@ def ReadData():
 
 
 def main(Model, FileLoc, FileName):
-	os.system("rm -rf main")
-	os.system("gcc -I ./lib main.c -o main")
+	os.system("rm -rf mainpy")
+	os.system("gcc -I ./lib mainpy.c -o mainpy")
 
 	OldImg = cv2.resize(np.array(Image.open(FileLoc[0]).convert("L")), (Owidth, Oheight))
 	TypeTrans.Img2Dat("df", "", "Input/Inp2.dat", OldImg)
@@ -93,7 +93,7 @@ def main(Model, FileLoc, FileName):
 		os.system("mv Input/Inp2.dat Input/Inp1.dat")
 		TypeTrans.Img2Dat("df", "", "Input/Inp2.dat", NewImg)
 		
-		os.system("./main")
+		os.system("./mainpy")
 
 		if not os.path.exists("Output/HogDEMOResult.dat"):
 			continue
@@ -172,7 +172,7 @@ def trainff(FileLoc):
 
 	pickle.dump(clf, open("Output/model.m", 'wb'))
 
-
+	print(clf.get_params([True]))
 
 if __name__ == '__main__':
 	if len(sys.argv) != 3:

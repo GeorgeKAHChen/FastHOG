@@ -5,18 +5,18 @@ main:
 	@./main
 	@rm -rf ./main
 
+Sign:
+	@ipython Main.py train ${InpFolder}
+
 train:
-	@ipython Main.py train ${InpFloder}
+	@ipython Main.py trainff Output/SaveTrain.dat
 
 test:
 	@ipython Main.py test ${InpFloder}
 
 clean:
 	@rm -rf ./main
-	@rm -rf Output/HogDEMOResult.dat
-
-cleanall:
-	@rm -rf ./main
+	@rm -rf ./mainpy
 	@rm -rf CARLA.log
 	@rm -rf Output/
 
