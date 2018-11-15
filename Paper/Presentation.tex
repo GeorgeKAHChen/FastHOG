@@ -100,7 +100,7 @@ In Pedestrian Detection problem, we aim at pedestrain. So the object above is eq
 \begin{frame}
 \frametitle{Introdution 3}
 Feature: include edge, texture, color and motion\\[2ex]
-\textbf{Human Detection Feature}\cite[Nguyen2016]
+\textbf{Human Detection Feature}\cite{Nguyen2016}
 \\1) Shape features (pixel level edge-based features)
 \\Disadvantage: Noisy, Pose-specific\\[1ex] 
 2) Region lever edge-based features (Hog)
@@ -334,40 +334,52 @@ Angle = \arctan\left[GradientY \over GradientX\right]
 
 \begin{frame}
 \thispagestyle{empty}
-\begin{multicols}{2}
 \begin{figure}[H]
+\begin{multicols}{2}
 \centering
 \subfigure[Block X]{
-\begin{minipage}[b]{0.4\textheight}
-\includegraphics[width=0.4\textheight]{Figure/Hog/BlockX.png}
+\begin{minipage}[b]{0.38\textwidth}
+\centering
+\includegraphics[height=0.3\textheight, width = 1\textwidth]{Figure/Hog/BlockX.png}
 \end{minipage}
 }
 \subfigure[Block Y]{
-\begin{minipage}[b]{0.4\textheight}
-\includegraphics[width=0.4\textheight]{Figure/Hog/BlockY.png}
-\end{minipage}
-}
-\subfigure[Statistic Data]{
-\begin{minipage}[b]{0.5\textheight}
-\includegraphics[width=0.5\textheight]{Figure/Hog/Statistic.png}
+\begin{minipage}[b]{0.38\textwidth}
+\centering
+\includegraphics[height=0.3\textheight, width = 1\textwidth]{Figure/Hog/BlockY.png}
 \end{minipage}
 }
 
+
+\begin{multicols}{2}
 \subfigure[Cells from block]{
-\begin{minipage}[b]{0.3\textheight}
-\includegraphics[width=0.3\textheight]{Figure/Hog/BlockCell.png}
+\begin{minipage}[c]{0.23\textwidth}
+\centering
+\includegraphics[height=0.35\textheight, width = 1\textwidth]{Figure/Hog/BlockCell.png}
+\end{minipage}
+}
+\subfigure[A Cell]{
+\begin{minipage}[c]{0.23\textwidth}
+\centering
+\includegraphics[height=0.25\textheight, width = 1\textwidth]{Figure/Hog/Cell.png}
+\end{minipage}
+}
+\end{multicols}
+
+
+\subfigure[Statistic Data]{
+\begin{minipage}[b]{0.48\textwidth}
+\centering
+\includegraphics[height=0.25\textheight, width = 1\textwidth]{Figure/Hog/Statistic.png}
 \end{minipage}
 }
 
-\subfigure[A Cell]{
-\begin{minipage}[b]{0.4\textheight}
-\includegraphics[width=0.4\textheight]{Figure/Hog/Cell.png}
-\end{minipage}
-}
+\end{multicols}
+
+
 
 \caption{Hog Block and Cells}
 \end{figure}
-\end{multicols}
 \end{frame}
 
 
@@ -376,7 +388,7 @@ Angle = \arctan\left[GradientY \over GradientX\right]
 \subsection{Classification: SVM}
 \begin{frame}
 \frametitle{Related Work - Classification: SVM}
-
+\noindent Sample Project(C/C++): \texttt{$https://github.com/cjlin1/libsvm$}\\
 \end{frame}
 
 
@@ -384,34 +396,134 @@ Angle = \arctan\left[GradientY \over GradientX\right]
 
 
 %Section ========================================================
-\section{Details and hit of the method}
+\section{Development of the method}
+\begin{frame}
+\textbf{Development}
+\end{frame}
+
+
+
 \subsection{DBSCAN}
 \begin{frame}
-\frametitle{Details - DBSCAN}
+\frametitle{Development - DBSCAN}
+Typically, DBSCAN using the dataset of node. However, as image cluster just have two parameter, x and y. It is not necessary to save all vector which need cluster as a new dataset.
+
+We can list all neighbourhood node as a table in the initial part of the algorithm. And just search the image from the table with DFS(Deep First Search). So the max time complex is $\mathcal{O}{(n\cdot m)}$, where $n$ is total of node which need cluster and $m$ is the size of table. It is faster than original method $\mathcal{O}{(n^2)}$
 \end{frame}
 
 
 
 \subsection{Hog Descriptor}
 \begin{frame}
-\frametitle{Details - Hog Descriptor}
+\frametitle{Development - Hog Descriptor}
+Typically, we need several times Hog network with different parameter to determine the location of person.\cite{Lipetski2017} As we used the DBSCAN for object detection, we don't need the whole image description. We just need the descript for every region(Cluster) as a block. This can also make the model of SVM smaller.
+
 \end{frame}
 
 
 
-\subsection{About Plan A}
 \begin{frame}
-\frametitle{Related Work - About Plan A}
-\end{frame}
+\thispagestyle{empty}
+\begin{figure}[H]
+\begin{multicols}{2}
+\centering
+\subfigure[]{
+\begin{minipage}[b]{0.45\textwidth}
+\includegraphics[width=0.45\textheight]{Figure/Pretreatment/Img2.png}
+\end{minipage}
+}
 
+\begin{multicols}{4}
+\subfigure[]{
+\begin{minipage}[b]{0.12\textwidth}
+\includegraphics[width=0.5\textwidth]{Figure/Development/1.png}
+\end{minipage}
+}
+
+\subfigure[]{
+\begin{minipage}[b]{0.12\textwidth}
+\includegraphics[width=0.5\textwidth]{Figure/Development/2.png}
+\end{minipage}
+}
+
+\subfigure[]{
+\begin{minipage}[b]{0.12\textwidth}
+\includegraphics[width=0.5\textwidth]{Figure/Development/3.png}
+\end{minipage}
+}
+
+\subfigure[]{
+\begin{minipage}[b]{0.12\textwidth}
+\includegraphics[width=0.5\textwidth]{Figure/Development/4.png}
+\end{minipage}
+}
+\end{multicols}
+\end{multicols}
+\caption{Image and Cluster image}
+\end{figure}
+
+
+
+Result:\\
+a: $0.268041, 0.028966, 0.259261, \ldots, 0.004802, 0.104433, length = 144$\\
+b: $0.436385, 0.008739, 0.054215, \ldots, 0.021862, 0.255745, length = 144$\\
+c: $0.259077, 0.057242, 0.074549, \ldots, 0.009185, 0.243987, length = 144$\\
+d: $0.349008, 0.100296, 0.149541, \ldots, 0.007501, 0.184265, length = 144$\\[2ex]
+
+All Image: $2.26329e^{-11}, 2.595552e^{-11}, 1.03369275e^{-11}, \ldots, $\\ \ \ \ \ \ \ \ \ \ \ \ \ \ $2.8235041e^{-11}, 1.8345979e^{-10}, length = 3888$
+
+
+\end{frame}
 
 
 
 
 %Section ========================================================
-\section{IFECP(Infrared Fish Eye Camera Pedestrian Database) database}
+\section{IFECPB(Infrared Fish Eye Camera Pedestrian Database database)}
+\begin{frame}
+\textbf{Infrared Fish Eye Camera Pedestrian Database(IFECPB) and some thoughts}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Related Work - About Plan A}
+As we know, all outer node of DBSCAN cluster must be edge node of every object. So if we using a pixel based detection method, DBSCAN will be a good tool for pretreatment and get the feature.
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{About Mark}
+I build a mark system based on DBSCAN to make the mark faster.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textheight]{Figure/Sonohoka/Mark1.png}
+\caption{Image and Cluster image}
+\end{figure}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{About Mark}
+As segmentation work has less relationship with object detection work.\cite{Nguyen2016} It is not easy to connect both of them.
+
+However recently, with the development of calculation, DNN have a rapidly using. And to build the model of DNN, it is necessary to perpare enough data for learning. I think traditional method (segmentation) may be used in this part of work, to make the mark faster and eaiser.\\[3ex]
+
+GMM based segmentation in object detection pretreatment and mark.
+\end{frame}
+
+
+
 \begin{frame}
 \frametitle{IFECP Database}
+As most dataset in pedestrain detection is day time and early-earning system most working in the night, it is not a bad idea to build a dataset include enough image in infrared model.
+\\[2ex]
+\textbf{Characteristic of this data set}
+\\1) Include at least $60\%$ night image in infrared model
+\\2) Fishing eye image
+\\3) For pedestrain detection and person re-identification
 \end{frame}
 
 
@@ -421,18 +533,82 @@ Angle = \arctan\left[GradientY \over GradientX\right]
 %Section ========================================================
 \section{Result}
 \begin{frame}
+\noindent
 \frametitle{Result}
+\begin{figure}[H]
+\centering
+\begin{multicols}{4}
+\centering
+\subfigure[Inp 1]{
+\begin{minipage}[b]{0.22\textwidth}
+\centering
+\includegraphics[width=1\textwidth]{Figure/Result/1.png}
+\end{minipage}
+}
+
+\subfigure[Inp 2]{
+\begin{minipage}[b]{0.22\textwidth}
+\centering
+\includegraphics[width=1\textwidth]{Figure/Result/2.png}
+\end{minipage}
+}
+
+\subfigure[Inp 3]{
+\begin{minipage}[b]{0.22\textwidth}
+\centering
+\includegraphics[width=1\textwidth]{Figure/Result/3.png}
+\end{minipage}
+}
+
+\subfigure[Inp 4]{
+\begin{minipage}[b]{0.22\textwidth}
+\centering
+\includegraphics[width=1\textwidth]{Figure/Result/4.png}
+\end{minipage}
+}
+\end{multicols}
+
+
+\begin{multicols}{3}
+\centering
+\subfigure[Clus 12]{
+\begin{minipage}[b]{0.31\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{Figure/Result/12.png}
+\end{minipage}
+}
+
+\subfigure[Clus 23]{
+\begin{minipage}[b]{0.31\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{Figure/Result/23.png}
+\end{minipage}
+}
+
+\subfigure[Clus 34]{
+\begin{minipage}[b]{0.31\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{Figure/Result/34.png}
+\end{minipage}
+}
+
+\end{multicols}
+
+
+
+\caption{Image Sequence}
+\end{figure}
+
+\begin{multicols}{3}
+\centering
+Warning\\
+Not Warning\\
+Warning\\
+\end{multicols}
+
+
 \end{frame}
 
-
-
-
-
-%Section ========================================================
-\section{Segmentation in pedestrain detection}
-\begin{frame}
-\frametitle{Segmentation in pedestrain detection}
-\end{frame}
 
 
 
@@ -440,8 +616,13 @@ Angle = \arctan\left[GradientY \over GradientX\right]
 %Section ========================================================
 \section{Reference}
 \begin{frame}
+\frametitle{Reference}
+\noindent Code: \texttt{$https://github.com/KazukiAmakawa/FastHog$}\\
+*Still under development, not published.\\[4ex]
+
 \bibliographystyle{plain}
 \bibliography{/Users/kazukiamakawa/Desktop/お仕事関連/Paper/KazukiAmakawa.bib}
+
 \end{frame}
 
 

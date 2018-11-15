@@ -21,7 +21,7 @@ int main(int argc, char const *argv[])
 	int Oheight, Owidth;
 	img1 = ReadFromFile("Input/Inp1.dat", img1, &Oheight, &Owidth);
 	img2 = ReadFromFile("Input/Inp2.dat", img2, &Oheight, &Owidth);
-	printf("%d  %d\n", Oheight, Owidth);
+	//printf("%d  %d\n", Oheight, Owidth);
 	AlgoInitial(Oheight, Owidth, img1);
 	AlgoMain(Oheight, Owidth, img2);
 	return 0;

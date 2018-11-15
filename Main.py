@@ -81,10 +81,13 @@ def main(Model, FileLoc, FileName):
 
 	OldImg = cv2.resize(np.array(Image.open(FileLoc[0]).convert("L")), (Owidth, Oheight))
 	TypeTrans.Img2Dat("df", "", "Input/Inp2.dat", OldImg)
-
+	if Model == "test":
+		print(FileName[0] + ":  ")
 	TrainX = []
 	TrainY = []
 	for kase in range(1, len(FileLoc)):
+		if Model == "test":
+			print(FileName[kase] + ":  ", end = "  ")
 		if kase != 1:
 			OldImg = deepcopy(NewImg)
 		NewImg = cv2.resize(np.array(Image.open(FileLoc[kase]).convert("L")), (Owidth, Oheight))
@@ -100,11 +103,13 @@ def main(Model, FileLoc, FileName):
 		ClusImg, HogDescriptor, clusMax = ReadData()
 		
 
-		if Model == "train":
+
+		if DEBUG:
 			os.system("rm -rf Output/Img1.png")
 			os.system("rm -rf Output/Img2.png")
 			imageio.imwrite("Output/Img1.png", cv2.cvtColor(OldImg, cv2.COLOR_GRAY2BGR))
 			imageio.imwrite("Output/Img2.png", cv2.cvtColor(NewImg, cv2.COLOR_GRAY2BGR))
+			
 			imgclus =  np.array([[[0, 0, 0] for n in range (Owidth)] for n in range (Oheight)])
 			iro = [[255, 0 , 0], [0, 255, 0], [0, 0, 255], [128, 0, 0], [0, 128, 0], [0, 0, 128], [255, 255, 0], [255, 0, 255], [0, 255, 255], [128, 128, 0], [128, 0, 128], [0, 128, 128]]
 			for i in range(0, Oheight):
@@ -112,6 +117,16 @@ def main(Model, FileLoc, FileName):
 					if ClusImg[i][j] != 0:
 						imgclus[i][j] = iro[ClusImg[i][j] % 12]
 			imageio.imwrite("Output/Img3.png", imgclus)
+
+
+
+		if Model == "train":
+			os.system("rm -rf Output/Img1.png")
+			os.system("rm -rf Output/Img2.png")
+			imageio.imwrite("Output/Img1.png", cv2.cvtColor(OldImg, cv2.COLOR_GRAY2BGR))
+			imageio.imwrite("Output/Img2.png", cv2.cvtColor(NewImg, cv2.COLOR_GRAY2BGR))
+			
+
 			
 			Sign = GUIMain.DBSCANGUI(ClusImg, clusMax, Oheight, Owidth)
 
@@ -133,15 +148,19 @@ def main(Model, FileLoc, FileName):
 				TestX.append(HogDescriptor[i])
 			Result = model.predict(TestX)
 			
-			
+			NotPrint = True
 
 			for i in range(0, len(Result)):
 				if Result[i] == 1:
 					print("WARNING!!!!")
 					ImgName = "Output/WARNING/img" + str(kase) + ".png" 
 					imageio.imwrite(ImgName, cv2.cvtColor(OldImg, cv2.COLOR_GRAY2BGR))
+					NotPrint = False
 					break
-
+			
+			if NotPrint:
+				print()
+			input()
 
 	if Model == "train":
 		FileName = "Output/SaveTrain.dat"
