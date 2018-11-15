@@ -104,7 +104,14 @@ def main(Model, FileLoc, FileName):
 			os.system("rm -rf Output/Img1.png")
 			os.system("rm -rf Output/Img2.png")
 			imageio.imwrite("Output/Img1.png", cv2.cvtColor(OldImg, cv2.COLOR_GRAY2BGR))
-			imageio.imwrite("Output/Img2.png", cv2.cvtColor(NewImg, cv2.COLOR_GRAY2BGR))		
+			imageio.imwrite("Output/Img2.png", cv2.cvtColor(NewImg, cv2.COLOR_GRAY2BGR))
+			imgclus =  np.array([[[0, 0, 0] for n in range (Owidth)] for n in range (Oheight)])
+			iro = [[255, 0 , 0], [0, 255, 0], [0, 0, 255], [128, 0, 0], [0, 128, 0], [0, 0, 128], [255, 255, 0], [255, 0, 255], [0, 255, 255], [128, 128, 0], [128, 0, 128], [0, 128, 128]]
+			for i in range(0, Oheight):
+				for j in range(0, Owidth):
+					if ClusImg[i][j] != 0:
+						imgclus[i][j] = iro[ClusImg[i][j] % 12]
+			imageio.imwrite("Output/Img3.png", imgclus)
 			
 			Sign = GUIMain.DBSCANGUI(ClusImg, clusMax, Oheight, Owidth)
 

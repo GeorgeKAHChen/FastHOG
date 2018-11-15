@@ -1,0 +1,134 @@
+%Pretreatment========================================================================================
+\documentclass[12pt]{article}
+\usepackage{lingmacros}
+\usepackage{tree-dvips}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{geometry}
+\usepackage{cite}
+\usepackage[amsmath,thmmarks]{ntheorem}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{listings} 
+\usepackage{verbatim}
+\usepackage{subfigure}
+\usepackage{appendix}  
+
+\theoremstyle{plain}
+\theoremseparator{\hspace{1em}} \theoremnumbering{arabic}
+\theoremsymbol{}
+\newtheorem{theorem}{\textbf{Theorem}}[section]
+\newtheorem{definition}{\textbf{Definition}}[section]
+\newtheorem{lemma}{\textbf{Lemma}}[section]
+
+\geometry{left=2cm,right=2cm,top=3cm,bottom=2cm}
+\title{Pedestrian Detection in Small Device with Fast Hog and Cluster}
+\author{Kazuki Amakawa}
+\date{\today}
+
+\begin{document}
+\maketitle
+\noindent \textbf{Abstract}\\
+
+\noindent \textbf{Pedstrain Detection, DBSCAN Cluster, HOG Descriptor, SVM, Small Device} \\
+\newpage
+
+%Main=================================================================================================
+%Section 1============================================================================================
+\section{Introduction}
+Human detection is a special kind of object detection which have wildly applicaion in autonomous vehicles, surveillance camera early-warning and robort design. This article will show a new method in surveillance camera early-warning with developed Hog and cluster method.
+
+
+Traditionally, the person detection include these four steps:
+
+1) Pretreatment (Gamma transform, down sample or other ).
+
+2) Get the feature (with Descriptor, for example Hog, SIFT, DNN and other method).
+
+3) Classification (with SVM, softmax or othe method).
+
+4) Post-processing (Probability decision, get the bounding box and others).
+
+
+Althrough the DNN is a good tool in person detection method, it still have some problems:
+
+1) Need a large amount of resource in memory and CPU calculation.
+
+2) Need a large amount of train data with sign.
+
+
+The main problem in small device we have to solve is:
+
+1) There are less memory we can use, so the model cannot too large
+
+2) The speed of CPU is not as fast as normal, so we have to make the time complex as less as possible
+
+This artical will introduced a new method based on Hog descriptor and DBSCAN cluster which can calculate faster and using lower memory. In the second part of the paper, we will showed the main processing of the algorithm. Section 3 will explain some technology of detail of the algorithm and establishment. Section 4 will showed the result of the algorithm in IFECPD (Infrared Fish Eye Camera Pedestrian Database)
+
+%Section 2============================================================================================
+\section{Related work}
+
+
+
+%Reference============================================================================================
+\newpage
+\medskip
+\bibliographystyle{plain}
+\bibliography{/Users/kazukiamakawa/Desktop/お仕事関連/Paper/KazukiAmakawa.bib}
+
+\end{document}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+%Sample Codes
+\begin{definition}
+Ring\\
+
+\end{definition}
+
+
+\begin{table}[!htb]
+\centering  
+\caption{Instruction}  
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+1 & 2   & $+, \cdot$ & 0,1   & 3\\
+\hline
+4 & 5 & 6     & 7 & 8 \\  
+\hline
+\end{tabular}  
+\end{table}  
+
+
+\noindent\rule[0.25\baselineskip]{\textwidth}{1pt}
+\begin{lstlisting}[language = Matlab][basicstyle=\ttfamily][!htb]
+[Code: Matlab]
+clear
+[number, txt, raw] = xlsread('File');
+\end{lstlisting} 
+\noindent\rule[0.25\baselineskip]{\textwidth}{1pt}
+
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1.00\textwidth]{Figure/MLResult.png} \\
+图3 CARLA算法的迭代情况\\
+\end{center}
+\end{figure}
+
+
+\begin{algorithm}[H]
+\caption{CARLA algorithm main steps}
+\begin{algorithmic}
+1)
+\end{algorithmic}
+\end{algorithm}
+
+
+\begin{flalign}
+& & \nonumber\\
+& & \nonumber
+\end{flalign}
