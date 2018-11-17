@@ -28,7 +28,7 @@ Parameter
 */
 int epision = 4;
 int minS = 25;
-int NegativeVal = 10;
+int NegativeVal = 50;
 int height = 72;
 int width = 36;
 
@@ -83,7 +83,7 @@ Algortihm: Differential Images
 			else								DiffImg[i][j] = 0;
 		}
 	}
-	//Write2D("Output/DiffImg.dat", Oheight, Owidth, DiffImg);
+	Write2D("Output/DiffImg.dat", Oheight, Owidth, DiffImg);
 	if (DiffTTL >= Oheight * Owidth / 10){
 		printf("WARNING!!");
 		return 0;

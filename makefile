@@ -1,4 +1,4 @@
-InpFolder="Input/SampleInput"
+InpFolder="Input/PRWTrain/Group1"
 TestFolder="Input/Test"
 
 main:
@@ -18,13 +18,17 @@ train:
 	@ipython Main.py trainff Output/SaveTrain.dat
 
 test:
-	@ipython Main.py test ${TestFolder}
+	@rm -rf tmpout
+	@mkdir tmpout
+	@ipython Main.py test ${TestFolder} 
 
 clean:
 	@rm -rf ./main
 	@rm -rf ./mainpy
 	@rm -rf CARLA.log
 	@rm -rf Output/
-
+	@rm -rf tmpout
+	
 	@mkdir Output/
 	@mkdir Output/WARNING
+	@mkdir tmpout
