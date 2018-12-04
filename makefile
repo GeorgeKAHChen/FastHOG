@@ -1,10 +1,16 @@
-InpFolder="Input/PRWTrain/Group1"
+InpFolder="Input/rgbDay"
 TestFolder="Input/Test"
 
-main:
-	@gcc -I ./lib ./main.c -o main
-	@./main
-	@rm -rf ./main
+CXX ?= g++
+CFLAGS = -Wall -Wconversion -O3 -fPIC
+SHVER = 2
+OS = $(shell uname)
+
+main: main.c svm.o
+	gcc $(CFLAGS) -I ./lib main.c svm.o -o main -lm
+
+svm.o: lib/svm.cpp lib/svm.h
+	$(CXX) $(CFLAGS) -c lib/svm.cpp 
 
 mark:
 	@ipython Main.py train ${InpFolder}
@@ -32,3 +38,16 @@ clean:
 	@mkdir Output/
 	@mkdir Output/WARNING
 	@mkdir tmpout
+
+
+
+
+
+
+
+
+
+
+
+
+

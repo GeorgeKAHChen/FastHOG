@@ -14,7 +14,6 @@
 #include "Hog.h"
 
 #include "ImageIO.h"
-#include "yuv-predict.h"
 
 #ifndef DEFALGO
 #define DEFALGO
@@ -50,8 +49,6 @@ Algorithm: Initialization
 	Hog.BlockY = height;
 	HogInit();									//Initial HOG
 
-	svm_Initial(Hog.BlockTtl * Hog.BlockLength, "Input/model.m");
-
 	return;
 }
 
@@ -66,32 +63,16 @@ int AlgoMain(int Oheight, int Owidth, unsigned char *NewImg){
 Variable Definition
 */
 	int i, j, p, q, ValX, ValY, kase;
-	int DiffTTL = 0;
-	int HaveHuman = 0;
-	
-	//Define cluster image and size and initial
-	int (*ClusImg)[Owidth] = NULL;
-	ClusImg = (int (*)[Owidth]) malloc(Oheight * Owidth * sizeof(int));
-	
-	for (i = 0; i < Oheight; i ++)
-		for (j = 0; j < Owidth; j ++)			ClusImg[i][j] = 0;
-
-	//Define differential image and size
-	int (*DiffImg)[Owidth] = NULL;
-	DiffImg = (int (*)[Owidth]) malloc(Oheight * Owidth * sizeof(int));	
-
-	//Define partial image for hog and size
-	unsigned char *PartialImg = NULL;
+	int ClusImg[Oheight][Owidth];
+	unsigned char *PartialImg;
 	PartialImg = (unsigned char *) malloc(width * height * sizeof(unsigned char));
-	
-	//Define cluster information
-	int (*ClusInfo)[4] = NULL;
 
 
 /*============================================================
 Algortihm: Differential Images
 */
-	//Differential Image
+	int DiffImg[Oheight][Owidth];
+	int DiffTTL = 0;
 	for (i = 0; i < Oheight; i ++){
 		for (j = 0; j < Owidth; j ++){
 			if ((int)OldImg[i * Owidth + j] - (int)NewImg[i * Owidth + j] > NegativeVal || 
@@ -102,23 +83,19 @@ Algortihm: Differential Images
 			else								DiffImg[i][j] = 0;
 		}
 	}
-	
-	//If a image have too many different pixel, break!
-	if (DiffTTL >= Oheight * Owidth / 20){
+	Write2D("Output/DiffImg.dat", Oheight, Owidth, DiffImg);
+	if (DiffTTL >= Oheight * Owidth / 10){
 		printf("WARNING!!");
-		goto AlgorithmEnd;
+		return 0;
 	}
-
-
-
 /*============================================================
 Algorithm: DBSCAN Part
 */
-	//Main DBSCAN algorithm
-	DBSCAN(Oheight, Owidth, DiffImg, minS, ClusImg);
 
-	//Size and Initial the Cluster infromation data array
-	ClusInfo = (int (*)[4]) malloc(4 * (ClusterVal + 1) * sizeof(int));
+	memset(ClusImg, 0, sizeof(ClusImg));
+	DBSCAN(Oheight, Owidth, DiffImg, minS, ClusImg);
+	//printf("%d\n", ClusterVal);
+	int ClusInfo[ClusterVal + 1][4];
 
 	for (i = 1; i < ClusterVal + 1; i ++){
 		ClusInfo[i][0] = -1;
@@ -127,7 +104,6 @@ Algorithm: DBSCAN Part
 		ClusInfo[i][3] = Oheight + Owidth;
 	}
 
-	//Get the cluster information
 	for (i = 0; i < Oheight; i ++){
 		for (j = 0; j < Owidth; j ++){
 			if (ClusImg[i][j] != 0){
@@ -143,8 +119,12 @@ Algorithm: DBSCAN Part
 		printf("%d  %d  %d  %d\n", ClusInfo[i][0], ClusInfo[i][1], ClusInfo[i][2], ClusInfo[i][3]);
 
 /*============================================================
-Algorithm: HOG + SVM Part
+Algorithm: HOG Part
 */
+#ifdef DEMO	
+	FILE *File;
+	File = fopen("Output/HogDEMOResult.dat", "wb");
+#endif
 	for (kase = 1; kase < ClusterVal + 1; kase ++){
 		int LengY = (int) (ClusInfo[kase][0] - ClusInfo[kase][1]) / height;
 		int LengX = (int) (ClusInfo[kase][2] - ClusInfo[kase][3]) / width;
@@ -158,22 +138,60 @@ Algorithm: HOG + SVM Part
 				PartialImg[i * Hog.width + j] = (unsigned char)Hog.GammaTable[(int)NewImg[ValY * Owidth + ValX]];
 			}
 		}
+		//char tmpname[128];
+		//sprintf(tmpname ,"Output/Partial_%d.dat", kase);
+		//WriteToFile(tmpname, PartialImg, height, width);
 		GetImage(PartialImg, height, width);
 		HogMain();
-		
-		if (read_from_memory(Hog.BlockTtl * Hog.BlockLength, HogResult) == 1){
-			HaveHuman = 1;
-			break;
+
+#ifdef DEMO
+		if(File != NULL)
+		{
+			for (j = 0; j < Hog.BlockLength; j ++){
+				fprintf(File, "%f ", HogResult[j]);
+			}
+			fprintf(File, "\n");
 		}
+#endif
 	}	
 
 
-AlgorithmEnd:
-	if (ClusImg)				free(ClusImg);
-	if (DiffImg)				free(DiffImg);
-	if (PartialImg)				free(PartialImg);
-	if (ClusInfo)				free(ClusInfo);
-	memcpy(OldImg, NewImg, sizeof(NewImg));
+#ifdef DEMO
+	fclose(File);
+	File = NULL;
+	Write2D("Output/ClusterImg.dat", Oheight, Owidth, ClusImg);
+#endif
+
+
+/*============================================================
+Algorithm: SVM Classificatin
+*/
+
+
+
+
+
+
+/*============================================================
+PostProcessing and Output
+
+
+#ifdef DEMO
+	fclose(File);
+	File = NULL;
+	Write2D("Output/ClusterImg.dat", Oheight, Owidth, ClusImg);
+#endif
+
+#ifdef DEBUG
+	EndTime = clock();
+	printf("Hog: %f\n", (double)(EndTime - StartTime)/ CLOCKS_PER_SEC);
+	TotalEnd = clock();
+	printf("Total: %f\n", (double)(TotalEnd - TotalStart)/ CLOCKS_PER_SEC);
+#endif
+
+	//FloatWriteToFile("Output/Result.dat", HogResult,  Hog.height * Hog.width, Hog.nbins);
+*/
+	
 	return 0;
 }
 

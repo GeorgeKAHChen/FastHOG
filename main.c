@@ -11,6 +11,8 @@
 #include <Algorithm.h>
 #include <ImageIO.h>
 
+#include <time.h>
+
 #define DEBUG
 #define DEMO
 
@@ -23,6 +25,11 @@ int main(int argc, char const *argv[])
 	img2 = ReadFromFile("Input/Inp2.dat", img2, &Oheight, &Owidth);
 	//printf("%d  %d\n", Oheight, Owidth);
 	AlgoInitial(Oheight, Owidth, img1);
-	AlgoMain(Oheight, Owidth, img2);
+    clock_t startTime,endTime;
+    startTime = clock();
+    AlgoMain(Oheight, Owidth, img2);
+    endTime = clock();
+
+    printf("%f", (double)(endTime - startTime) / CLOCKS_PER_SEC);
 	return 0;
 }

@@ -14,7 +14,6 @@
 #include "Hog.h"
 
 #include "ImageIO.h"
-#include "yuv-predict.h"
 
 #ifndef DEFALGO
 #define DEFALGO
@@ -50,8 +49,6 @@ Algorithm: Initialization
 	Hog.BlockY = height;
 	HogInit();									//Initial HOG
 
-	svm_Initial(Hog.BlockTtl * Hog.BlockLength, "Input/model.m");
-
 	return;
 }
 
@@ -67,7 +64,6 @@ Variable Definition
 */
 	int i, j, p, q, ValX, ValY, kase;
 	int DiffTTL = 0;
-	int HaveHuman = 0;
 	
 	//Define cluster image and size and initial
 	int (*ClusImg)[Owidth] = NULL;
@@ -160,11 +156,7 @@ Algorithm: HOG + SVM Part
 		}
 		GetImage(PartialImg, height, width);
 		HogMain();
-		
-		if (read_from_memory(Hog.BlockTtl * Hog.BlockLength, HogResult) == 1){
-			HaveHuman = 1;
-			break;
-		}
+
 	}	
 
 

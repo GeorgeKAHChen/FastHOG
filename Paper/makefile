@@ -1,4 +1,4 @@
-filename = Presentation
+filename = Reporter
 
 main:
 	xelatex ${filename}.tex

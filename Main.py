@@ -84,7 +84,7 @@ def main(Model, FileLoc, FileName):
 		os.system("gcc -I ./lib mainpy.c -o mainpy")
 	else:
 		print("Sorry, this system cannot be used under Windows plantform")
-
+	ImageAddArr = []
 	OldImg = cv2.resize(np.array(Image.open(FileLoc[0]).convert("L")), (Owidth, Oheight))
 	TypeTrans.Img2Dat("df", "", "Input/Inp2.dat", OldImg)
 	if Model == "test":
@@ -109,7 +109,8 @@ def main(Model, FileLoc, FileName):
 			continue
 		ClusImg, HogDescriptor, clusMax = ReadData()
 
-
+		if clusMax == 0:
+			continue
 
 		if DEBUG:
 			os.system("rm -rf Output/Img1.png")
@@ -137,17 +138,19 @@ def main(Model, FileLoc, FileName):
 				imageio.imwrite("Output/Img2.png", cv2.cvtColor(NewImg, cv2.COLOR_GRAY2BGR))
 			
 			Sign = GUIMain.DBSCANGUI(ClusImg, clusMax, Oheight, Owidth)
-
+			ImageAdd = 0
 			for i in range(1, len(Sign)):
 				if Sign[i] == 1:
 					continue
-
+				ImageAdd += 1
 				TrainX.append(HogDescriptor[i])
 				if Sign[i] == 2:
 					TrainY.append(1)
 				if Sign[i] == 0:
 					TrainY.append(0)
 
+			ImageAddArr.append(ImageAdd)
+			print(ImageAdd)	
 
 
 		if Model == "test":
@@ -200,7 +203,8 @@ def main(Model, FileLoc, FileName):
 						RGBImg[BoxData[k][2]][j][1] = 255
 
 				print()
-				imageio.imwrite("tmpout/" + FileName[kase] + ".png" , RGBImg)
+				if len(BoxData) != 0:
+					imageio.imwrite("tmpout/" + FileName[kase] + ".png" , RGBImg)
 
 
 
@@ -211,7 +215,9 @@ def main(Model, FileLoc, FileName):
 
 
 	if Model == "train":
-		FileName = "Output/SaveTrain.dat"
+		Init.ArrOutput([ImageAddArr])
+
+		FileName = "Output/m.dat"
 		File = open(FileName, "w")
 		Str = ""
 		for i in range(0, len(TrainX)):
@@ -294,10 +300,15 @@ if __name__ == '__main__':
 	
 	FileLoc = []
 	FileName = []
-	for i in range(1, 57):
-		FileLoc.append("./Input/PRWInput/Test/Group1/0" + str(i) + ".jpg")
-		FileName.append(str(i))
 	
+	for i in range(0, 601):
+		FileLoc.append("./Input/rgbDay/" + str(i) + ".jpg")
+		FileName.append(str(i))
+	"""
+	for i in range(601, 1000):
+		FileLoc.append("./Input/rgbDay/" + str(i) + ".jpg")
+		FileName.append(str(i))
+	"""
 	if sys.argv[1] == "test":
 		main("test", FileLoc, FileName)
 	if sys.argv[1] == "train":

@@ -12,7 +12,7 @@ int *DBSCANTable;
 int SizeOfTable = 0;
 
 int ClusterVal;
-int WidthImg;
+
 
 void DBSCANInit(int episilon, int height, int width);
 int *DBSCAN(int height, int width, int InpImg[height][width], int minS, int LabelImg[height][width]);
@@ -23,7 +23,6 @@ void DBSCANInit(int episilon, int height, int width){
 	int AreaTable[2 * episilon + 1][2 * episilon + 1];
 	int i, j, Val;
 
-	WidthImg = width;
 	for (i = 0; i < 2 * episilon + 1; i ++){
 		for (j = 0; j < 2 * episilon + 1; j ++){
 			if (i == episilon && j == episilon)
@@ -56,15 +55,13 @@ void DBSCANInit(int episilon, int height, int width){
 
 
 
-int *DBSCAN(int height, int width, int InpImg[height][width], int minS, int (*LabelImg)[WidthImg]){
+int *DBSCAN(int height, int width, int InpImg[height][width], int minS, int LabelImg[height][width]){
 	int i, j, k, Point, Inner, willCluster, ValY, ValX, iNew, jNew, l, noStack;
+	int Stack[5000][2];
 	int StackVal = 0;
 
 	ClusterVal = 0;
-
-	int (*Stack)[2];
-	Stack = (int (*)[2]) malloc ((height * width / 20 * 2 + 50) * sizeof(int));
-	
+	//memset(LabelImg, 0, sizeof(LabelImg));
 
 	for (i = 0; i < height; i ++){
 		for (j = 0; j < width; j ++){
@@ -142,7 +139,8 @@ int *DBSCAN(int height, int width, int InpImg[height][width], int minS, int (*La
 								Stack[StackVal][1] = ValX;
 								StackVal ++;
 							}
-
+							if (StackVal >= 2000)
+												return -1;
 						}
 					}
 					if (StackVal == 0)			break;
