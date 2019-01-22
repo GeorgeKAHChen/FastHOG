@@ -18,6 +18,7 @@
 
 int main(int argc, char const *argv[])
 {
+	printf("Compile succeed\n");
 	unsigned char *img1;
 	unsigned char *img2;
 	int Oheight, Owidth;

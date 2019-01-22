@@ -6,19 +6,22 @@ CFLAGS = -Wall -Wconversion -O3 -fPIC
 OS = $(shell uname)
 
 
-main: libsvm.so
-	gcc main.c -o main -L. -lsvm -Wl,-rpath,./
-	gcc svm-train.c -o train -L./ -lsvm -Wl,-rpath,./
-#gcc -o main -L. –ltest -Wl,-rpath=/root/test/lib test.c
+main: lib
+	gcc main.c -L. -lsvm -o main
+	gcc svm-train.c -L. -lsvm -o train
+	#gcc main.c svm.o -o main -lm
 
-libsvm.so:
-	$(CXX) $(CFLAGS) -c svm.cpp 
+lib: svm.o
 	if [ "$(OS)" = "Darwin" ]; then \
-		SHARED_LIB_FLAG="-dynamiclib -Wl,-install_name,libsvm.so.$(SHVER)"; \
+		SHARED_LIB_FLAG="-dynamiclib -Wl,-install_name,libsvm.so"; \
 	else \
-		SHARED_LIB_FLAG="-shared -Wl,-soname,libsvm.so.$(SHVER)"; \
+		SHARED_LIB_FLAG="-shared -Wl,-soname,libsvm.so"; \
 	fi; \
 	$(CXX) $${SHARED_LIB_FLAG} svm.o -o libsvm.so
+	
+
+svm.o: svm.cpp svm.h
+	$(CXX) $(CFLAGS) -c svm.cpp 
 
 test:
 	./train
@@ -40,16 +43,4 @@ clean:
 	@mkdir Output/
 	@mkdir Output/WARNING
 	@mkdir tmpout
-
-
-
-
-
-
-
-
-
-
-
-
 
