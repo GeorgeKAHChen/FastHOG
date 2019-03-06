@@ -18,16 +18,16 @@
 
 int main(int argc, char const *argv[])
 {
-	printf("Compile succeed\n");
 	unsigned char *img1;
 	unsigned char *img2;
 	int Oheight, Owidth;
-	img1 = ReadFromFile("tmpInp/Inp1.dat", img1, &Oheight, &Owidth);
+	img1 = ReadFromFile("Input/Inp1.dat", img1, &Oheight, &Owidth);
 	img2 = ReadFromFile("Input/Inp2.dat", img2, &Oheight, &Owidth);
-	//printf("%d  %d\n", Oheight, Owidth);
+	printf("%d  %d\n", Oheight, Owidth);
 	AlgoInitial(Oheight, Owidth, img1);
     clock_t startTime,endTime;
     startTime = clock();
+    printf("Compile succeed\n");
     AlgoMain(Oheight, Owidth, img2);
     endTime = clock();
 

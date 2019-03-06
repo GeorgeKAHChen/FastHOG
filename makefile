@@ -9,7 +9,6 @@ OS = $(shell uname)
 main: lib
 	gcc main.c -L. -lsvm -o main
 	gcc svm-train.c -L. -lsvm -o train
-	#gcc main.c svm.o -o main -lm
 
 lib: svm.o
 	if [ "$(OS)" = "Darwin" ]; then \
@@ -24,7 +23,7 @@ svm.o: svm.cpp svm.h
 	$(CXX) $(CFLAGS) -c svm.cpp 
 
 test:
-	./train
+	./main
 
 mark:
 	@ipython Main.py train ${InpFolder}

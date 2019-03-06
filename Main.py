@@ -77,6 +77,7 @@ def ReadData():
 
 
 def main(Model, FileLoc, FileName):
+	#compile C file
 	os.system("rm -rf mainpy")
 	if Init.SystemJudge() == "Linux":
 		os.system("gcc -I ./lib mainpy.c -o mainpy -lm")
@@ -84,12 +85,18 @@ def main(Model, FileLoc, FileName):
 		os.system("gcc -I ./lib mainpy.c -o mainpy")
 	else:
 		print("Sorry, this system cannot be used under Windows plantform")
+	
+	#Read initial image
 	ImageAddArr = []
 	OldImg = cv2.resize(np.array(Image.open(FileLoc[0]).convert("L")), (Owidth, Oheight))
+	
 	TypeTrans.Img2Dat("df", "", "Input/Inp2.dat", OldImg)
+	
 	if Model == "test":
 		print(FileName[0] + ":\t")
 		model = pickle.load(open("Output/model.m", 'rb'))
+	
+
 	TrainX = []
 	TrainY = []
 	for kase in range(1, len(FileLoc)):
@@ -288,6 +295,7 @@ def trainff(FileLoc):
 
 
 	print(clf.get_params([True]))
+
 
 
 
